@@ -25,6 +25,8 @@ public abstract class Board{
           neighborhood[counterRows][counterColumns] = false;
       }
     }
+
+    testDelete();
   }
 
   public Box getBox(int positionBox){
@@ -38,7 +40,20 @@ public abstract class Board{
 
   public abstract boolean checkPositions(Piece piece, int positionBox);
 
-  public abstract int deleteRowColumn();
+  public int verifyLayer(){
+    for (byte counter = 0; counter < (dimension * 2); counter ++) { //verifico las capas
+      layers[counter].verifyLayer(dimension);
+    }
+    byte counter = 0; int addRelease = 0; //libero las capas
+    while(counter < (dimension * 2)) {
+      addRelease += layers[counter].boxesRelease(dimension);
+      counter ++;
+    }
+    return addRelease;
+  }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////PRUEBAS//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   public void printNeighborhood(){
     for (int counterRows = 0; counterRows < numberOfBoxes; counterRows++) {
@@ -65,8 +80,8 @@ public abstract class Board{
   }
 
   public void printLayers(){ // REVISAR ESTO!!!!!!!
-    for (byte counter = 9; counter < numberOfBoxes; counter ++) {
-      System.out.println("Casilla" + boxes[counter].getIdBox() + " pertenece a la capa: " + boxes[counter].getLayer());
+    for (byte counter = 0; counter < dimension*2; counter ++) {
+      layers[counter].printLayers(dimension);
     }
   }
 }

@@ -58,8 +58,8 @@ public class World{
       System.out.println("La pieza: " + typePiece + " " + sizePiece + " puede ser colocada");
       if (typePiece == "Square") score += sizePiece*sizePiece;
       else score += sizePiece;
-      int deleteRowsColumns = board.deleteRowColumn();
-      score += (deleteRowsColumns) * 10;
+      int addRelease = board.verifyLayer();
+      score += addRelease;
       return positionPiece;
     }
     else{

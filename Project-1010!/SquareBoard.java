@@ -5,24 +5,27 @@ public class SquareBoard extends Board{
 
   public SquareBoard(byte dimension, byte id){
     super(dimension, id);
+    //Aqui hago la creacion de mis capas, por cada fila y columna.
     layers = new Layer[dimension * 2];
-    byte counterLayers = 0, counterRows = 0, counterColumns = 0, addColumns = (byte) (dimension / 2);
+    byte counterLayers = 0, counterRows = 0, counterColumns = 0, positionBoxLayer = 0;
     while(counterLayers < dimension){
       layers[counterLayers] = new Layer("Row " + counterLayers, dimension);
-      layers[counterLayers + addColumns] = new Layer("Column " + counterLayers, dimension);
-      while(counterColumns < dimension){
+      layers[counterLayers + dimension] = new Layer("Column " + counterLayers, dimension);
+      positionBoxLayer = 0;
+      while(positionBoxLayer < dimension){
         boxes[counterRows].setLayer(layers[counterLayers]);
-        boxes[counterColumns].setLayer(layers[counterLayers + addColumns]);
-        layers[counterLayers].setBoxToLayer(boxes[counterRows]);
-        layers[counterLayers + addColumns].setBoxToLayer(boxes[counterColumns]);
+        boxes[counterColumns].setLayer(layers[counterLayers + dimension]);
+        layers[counterLayers].setBoxToLayer(boxes[counterRows], positionBoxLayer);
+        layers[counterLayers + dimension].setBoxToLayer(boxes[counterColumns], positionBoxLayer);
         counterRows ++;
         counterColumns += dimension;
+        positionBoxLayer ++;
       }
       counterLayers ++;
       counterColumns = counterLayers;
     }
 
-    super.printLayers();
+    //super.printLayers();
   }
 
   public void shapeBoard(){
@@ -440,94 +443,4 @@ public class SquareBoard extends Board{
       else if (typePiece == "L invertida") addInvestedL(sizePiece, positionBox, color);
       else  addLeftInvestedL (sizePiece, positionBox, color);
     }
-
-  public void liberateBoxes(int[] delete, byte storedElements, byte option){
-    Status freeBox = new FreeBox();
-    int counterExit = 0, positionBox = 0;
-
-    System.out.println("Liberando casillas!!");
-
-    if(option == 1){ //aqui liberamos casillas en fila
-      while(counterExit <= storedElements){
-        byte counterJump = 0;
-        positionBox = delete[counterExit];
-        while(counterJump < dimension){
-          boxes[positionBox].setStatus(freeBox);
-          positionBox ++;
-          counterJump ++;
-        }
-        counterExit ++;
-      }
-    }
-    else{ //aqui liberamos casillas en columna
-      int finalBox = ((numberOfBoxes) - dimension) + delete[0];
-      while(counterExit <= storedElements){
-        if (counterExit != 0) finalBox += delete[counterExit] - delete[counterExit - 1];
-        positionBox = delete[counterExit];
-
-        while(positionBox <= finalBox){
-          boxes[positionBox].setStatus(freeBox);
-          positionBox += dimension;
-        }
-        counterExit ++;
-      }
-    }
-  }
-
-  public int deleteRowColumn(){
-    int[] deleteRows = new int[dimension]; //almacenador de la primera casilla de la fila a eliminar
-    int[] deleteColumns = new int[dimension]; //almacenador de la primera casilla de la columna a eliminar
-    byte positionDeleteRows = 0, positionBoxDown = dimension, positionBox = 0, rowColumn = 0, counterForScore = 0;
-    String status = "FULL";
-    while(positionBox < numberOfBoxes){ //evaluo todas las filas
-      if(boxes[positionBox].getStatus() != status){
-        //salto hacia la siguiente fila si en la fila que estoy hay una casilla libre
-        positionBox = positionBoxDown;
-        positionBoxDown += dimension;
-        rowColumn = positionBox;
-      }
-      else{
-        if(positionBox == positionBoxDown - 1){
-          deleteRows[positionDeleteRows] = rowColumn;
-          positionDeleteRows ++;
-          rowColumn = positionBoxDown;
-          positionBoxDown += dimension;
-          counterForScore ++;
-          System.out.println("Fila");
-        }
-        positionBox ++;
-      }
-    }
-
-    positionBox = 0; rowColumn = 0;
-    byte positionBoxNext = (byte) (positionBox + 1), positionDeleteColumns = 0; int finalBox = (numberOfBoxes) - dimension;
-    while(rowColumn < dimension && positionBox < numberOfBoxes){ //evaluo todas las columnas
-      if(boxes[positionBox].getStatus() != status){
-        //salto hacia la siguiente fila si en la fila que estoy hay una casilla libre
-        positionBox = positionBoxNext;
-        positionBoxNext ++;
-        rowColumn ++;
-        finalBox ++;
-      }
-      else{
-        if(positionBox == finalBox){
-          deleteColumns[positionDeleteColumns] = rowColumn;
-          positionDeleteColumns ++;
-          rowColumn ++;
-          positionBoxNext ++;
-          finalBox ++;
-          counterForScore ++;
-          System.out.println("Columna");
-        }
-        positionBox += dimension;
-      }
-    }
-
-    byte idRow = 1, idColumn = 2;
-    if (counterForScore != 0) {
-      liberateBoxes(deleteRows, positionDeleteRows, idRow); //1 es para decir que es fila
-      liberateBoxes(deleteColumns, positionDeleteColumns, idColumn); //2 es para decir que es columna
-    }
-    return counterForScore;
-  }
 }

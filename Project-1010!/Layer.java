@@ -1,20 +1,51 @@
 public class Layer{
-   String name;
-   Box[] boxes;
-   byte positionBox;
+   private String name;
+   private Box[] boxes;
+   private boolean permitRelease;
 
    public Layer(String name, byte numberBoxes){
      this.name = name;
+     this.permitRelease = false;
      boxes = new Box[numberBoxes];
-     this.positionBox = 0;
    }
 
-   public void setBoxToLayer(Box box){
+   public void setBoxToLayer(Box box, byte positionBox){
      boxes[positionBox] = box;
-     this.positionBox ++;
    }
 
    public String getLayer(){
      return name;
+   }
+
+   public void verifyLayer(byte dimension){
+     byte counter = 0; String status = "FULL";
+     while(counter < dimension){
+       if(boxes[counter].getStatus() == status) permitRelease = true;
+       else{
+         permitRelease = false;
+         break;
+       }
+      counter ++;
+     }
+   }
+
+   public byte boxesRelease(byte dimension){
+     if(permitRelease){
+       Status status = new FreeBox();
+       for (byte counter = 0; counter < dimension; counter ++) {
+         boxes[counter].setStatus(status);
+       }
+       permitRelease = false;
+       return dimension;
+     }
+     return 0;
+   }
+
+   public void printLayers(byte dimension){
+     System.out.println("La capa " + name + " tiene las siguientes casillas:");
+     for (byte counter = 0; counter < dimension; counter ++) {
+       System.out.print(boxes[counter].getIdBox() + "  ");
+     }
+      System.out.println();
    }
 }
