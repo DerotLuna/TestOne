@@ -6,7 +6,7 @@ public class World{
   private int score;
   //private Menu subMenu; //atributo posible, o puede que sea un metodo!!!
   private Player player;
-  private Piece[] capsule;
+  private PieceSquareBoard[] capsule;
   private Board board;
   private byte dimensionBoard;
 
@@ -22,7 +22,7 @@ public class World{
       this.board = new SquareBoard(dimensionBoard, idBoard); //instacio mi tablero cuadrado
       //se generan las piezas principales
       for (byte counterOfPieces = 0; counterOfPieces < LIMIT_CAPSULE; counterOfPieces ++) {
-        capsule[counterOfPieces] = new PieceSquareBoard();
+        capsule[counterOfPieces] = PieceSquareBoard.getRandomPiece();
       }
     }
     // por ahora se tiene un solo tipo de tablero
@@ -41,7 +41,7 @@ public class World{
       positionPiece = movePiece();
       if (positionPiece != dimensionBoard) //verifico si es necesario crear la pieza
         if (idBoard == 1) // evaluo que tablero uso para asi generar las piezas a medida que se usan
-          capsule[positionPiece] = new PieceSquareBoard(); //utilizo una pieza y al final genero otra
+          capsule[positionPiece] = PieceSquareBoard.getRandomPiece(); //utilizo una pieza y al final genero otra
       if (scannerAll(3) < dimensionBoard) clear();
 
     }
@@ -51,12 +51,14 @@ public class World{
     //byte deltaX = 2, deltaY = 2;
     int positionPiece =  scannerAll(1), positionBox =  scannerAll(2);
     //board.checkPositions(capsule[positionPiece], row, column);
-    boolean answer = board.checkPositions(capsule[positionPiece], positionBox);
-    String typePiece = capsule[positionPiece].getTypePiece();
-    int sizePiece =  capsule[positionPiece].getSizePiece();
+    PieceSquareBoard piece = capsule[positionPiece];
+    boolean answer = board.checkPositions(piece, positionBox);
+
+    String typePiece = piece.getTypePiece();
+    int sizePiece =  piece.getSizePiece();
     if(answer){
       System.out.println("La pieza: " + typePiece + " " + sizePiece + " puede ser colocada");
-      if (typePiece == "Square") score += sizePiece*sizePiece;
+      if (typePiece == "SQUARE") score += sizePiece*sizePiece;
       else score += sizePiece;
       int addRelease = board.verifyLayer();
       score += addRelease;

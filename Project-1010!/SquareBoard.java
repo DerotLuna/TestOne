@@ -13,8 +13,9 @@ public class SquareBoard extends Board{
       layers[counterLayers + dimension] = new Layer("Column " + counterLayers, dimension);
       positionBoxLayer = 0;
       while(positionBoxLayer < dimension){
-        boxes[counterRows].setLayer(layers[counterLayers]);
-        boxes[counterColumns].setLayer(layers[counterLayers + dimension]);
+        //boxes[counterRows].setLayer(layers[counterLayers]);  // le doy a conocer a casilla a la capa que pertenece
+        //boxes[counterColumns].setLayer(layers[counterLayers + dimension]);  // le doy a conocer a casilla a la capa que pertenece
+        //verificar si es realmente necesario, que las casillas sepan a que capa pertenecen...
         layers[counterLayers].setBoxToLayer(boxes[counterRows], positionBoxLayer);
         layers[counterLayers + dimension].setBoxToLayer(boxes[counterColumns], positionBoxLayer);
         counterRows ++;
@@ -29,9 +30,7 @@ public class SquareBoard extends Board{
   }
 
   public void shapeBoard(){
-    byte rowAndColumn = 0;
-    byte counterDown = dimension;
-    byte counter = (byte)(counterDown - 1);
+    byte rowAndColumn = 0, counterDown = dimension, counter = (byte)(counterDown - 1);
     while (rowAndColumn < (numberOfBoxes - 1)){
       if(rowAndColumn <= counter){
         if (counter < numberOfBoxes - 1){
@@ -54,16 +53,15 @@ public class SquareBoard extends Board{
     //creo que el pivote que definiremos seria un pivote logico, no podemos tener una variable, o no la veo por lo menos.
     String typePiece = piece.getTypePiece();
     byte sizePiece = piece.getSizePiece();
-    Color color = piece.getColorPiece();
-    if (typePiece == "Square") checked = squareEvaluations(sizePiece, positionBox, checked);
-    else if (typePiece == "Vertical Line") checked = lineEvaluations(sizePiece, positionBox, 2, checked);
-    else if (typePiece == "Horizontal Line") checked = lineEvaluations(sizePiece, positionBox, 1, checked);
+    if (typePiece == "SQUARE") checked = squareEvaluations(sizePiece, positionBox, checked);
+    else if (typePiece == "VERTICAL LINE") checked = lineEvaluations(sizePiece, positionBox, 2, checked);
+    else if (typePiece == "HORIZONTAL LINE") checked = lineEvaluations(sizePiece, positionBox, 1, checked);
     else if(typePiece == "L") checked = lEvaluation(sizePiece, positionBox, checked);
-    else if(typePiece == "L Left") checked = leftLEvaluation(sizePiece, positionBox, checked);
-    else if (typePiece == "L Invested") checked = investedLEvaluation(sizePiece, positionBox, checked);
+    else if(typePiece == "L LEFT") checked = leftLEvaluation(sizePiece, positionBox, checked);
+    else if (typePiece == "L INVESTED") checked = investedLEvaluation(sizePiece, positionBox, checked);
     else checked = investedLEvaluation(sizePiece, positionBox, checked);
     if (checked == true){
-      addPiece(typePiece, sizePiece, positionBox , color);
+      addPiece(typePiece, sizePiece, positionBox);
     }
     return checked;
   }
@@ -340,11 +338,10 @@ public class SquareBoard extends Board{
     return checked;
   }
 
-  public void addSquare(byte sizeSquare, int positionBox, Color color){
+  public void addSquare(byte sizeSquare, int positionBox){
     Status fullBox = new FullBox();
     if(sizeSquare == 1){
       boxes[positionBox].setStatus(fullBox);
-      boxes[positionBox].setColorBox(color);
     }
     else{
       int positionBoxDown = positionBox + dimension;
@@ -353,7 +350,6 @@ public class SquareBoard extends Board{
         byte counterJump = 1;
         while(counterJump <= sizeSquare){
           boxes[positionBox].setStatus(fullBox);
-          boxes[positionBox].setColorBox(color);
           counterJump ++;
           positionBox++;
         }
@@ -365,12 +361,11 @@ public class SquareBoard extends Board{
     System.out.println("positionBox: " + positionBox);
   }
 
-  public void addLine(byte sizeLine, int positionBox, int answer, Color color){
+  public void addLine(byte sizeLine, int positionBox, int answer){
     Status fullBox = new FullBox();
     byte counterExit = 1;
     while(counterExit <= sizeLine){
       boxes[positionBox].setStatus(fullBox);
-      boxes[positionBox].setColorBox(color);
       counterExit ++;
       System.out.println("positionBox: " + positionBox);
       if(answer == 1)  positionBox++;
@@ -378,13 +373,12 @@ public class SquareBoard extends Board{
     }
   }
 
-  public void addL(byte sizeL, int positionBox, Color color){
+  public void addL(byte sizeL, int positionBox){
       Status fullBox = new FullBox();
       byte exitCounter = 0;
 
       while (exitCounter < sizeL){
         boxes[positionBox].setStatus(fullBox);
-        boxes[positionBox].setColorBox(color);
           if (exitCounter == 0) positionBox += dimension;
           else positionBox ++;
         exitCounter ++;
@@ -392,14 +386,13 @@ public class SquareBoard extends Board{
     }
 
 
-    public void addLeftL(byte sizeLeftL, int positionBox, Color color){
+    public void addLeftL(byte sizeLeftL, int positionBox){
       Status fullBox = new FullBox();
       byte exitCounter = 0;
       byte counterJump = 1;
 
       while (exitCounter < sizeLeftL){
         boxes[positionBox].setStatus(fullBox);
-        boxes[positionBox].setColorBox(color);
           if (counterJump == sizeLeftL - 1) positionBox -= dimension;
           else positionBox ++;
         exitCounter ++;
@@ -407,26 +400,24 @@ public class SquareBoard extends Board{
       }
     }
 
-    public void addInvestedL(byte sizeInvestedL, int positionBox, Color color){
+    public void addInvestedL(byte sizeInvestedL, int positionBox){
       Status fullBox = new FullBox();
       byte exitCounter = 0;
 
       while (exitCounter < sizeInvestedL){
         boxes[positionBox].setStatus(fullBox);
-        boxes[positionBox].setColorBox(color);
           if (exitCounter == 0) positionBox -= dimension;
           else positionBox ++;
         exitCounter ++;
       }
     }
 
-    public void addLeftInvestedL(byte sizeInvestedLeftL, int positionBox, Color color){
+    public void addLeftInvestedL(byte sizeInvestedLeftL, int positionBox){
       Status fullBox = new FullBox();
       byte exitCounter = 0;
       byte counterJump = 1;
       while (exitCounter < sizeInvestedLeftL){
         boxes[positionBox].setStatus(fullBox);
-        boxes[positionBox].setColorBox(color);
           if (counterJump == sizeInvestedLeftL - 1)positionBox += dimension;
           else positionBox ++;
         counterJump ++;
@@ -434,13 +425,13 @@ public class SquareBoard extends Board{
       }
     }
 
-    public void addPiece(String typePiece, byte sizePiece,int positionBox ,Color color){
-      if (typePiece == "Square") addSquare(sizePiece, positionBox, color);
-      else if (typePiece == "Vertical Line") addLine(sizePiece, positionBox, 2, color);
-      else if (typePiece == "Horizontal Line") addLine(sizePiece, positionBox, 1, color);
-      else if (typePiece == "L") addL(sizePiece, positionBox, color);
-      else if (typePiece == "L hacia la izquierda") addLeftL(sizePiece, positionBox, color);
-      else if (typePiece == "L invertida") addInvestedL(sizePiece, positionBox, color);
-      else  addLeftInvestedL (sizePiece, positionBox, color);
+    public void addPiece(String typePiece, byte sizePiece,int positionBox){
+      if (typePiece == "SQUARE") addSquare(sizePiece, positionBox);
+      else if (typePiece == "VERTICAL LINE") addLine(sizePiece, positionBox, 2);
+      else if (typePiece == "HORIZONTAL LINE") addLine(sizePiece, positionBox, 1);
+      else if (typePiece == "L") addL(sizePiece, positionBox);
+      else if (typePiece == "L LEFT") addLeftL(sizePiece, positionBox);
+      else if (typePiece == "L INVESTED") addInvestedL(sizePiece, positionBox);
+      else  addLeftInvestedL (sizePiece, positionBox);
     }
 }

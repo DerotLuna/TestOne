@@ -4,7 +4,7 @@ public class Box{
   protected Status status;
   private byte id;
   private Color color;
-  private Layer layer;
+  //private Layer[] layer;
 
   public Box(int id){
     this.id = (byte) id;
@@ -15,9 +15,9 @@ public class Box{
     this.status = status;
   }
 
-  public void setLayer(Layer layer){
+  /*public void setLayer(Layer layer){
     this.layer = layer;
-  }
+  }*/
 
   public String getStatus(){
       return status.getStatus();
@@ -35,7 +35,7 @@ public class Box{
     this.color = color;
   }
 
-  public String getLayer(){
+  /*public String getLayer(){
     return this.layer.getLayer();
-  }
+  }*/
 }

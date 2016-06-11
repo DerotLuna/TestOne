@@ -1,12 +1,11 @@
 import java.util.Arrays;
 
 public abstract class Board{
-  protected byte id;
+  protected byte id, dimension;
   protected Box[] boxes;
   protected int numberOfBoxes;
   protected boolean[][] neighborhood;
   protected Layer[] layers;
-  protected byte dimension; //pueden ser filas y columnas o un atributo que defina las casillas
   /* Buscar la manera de no tener la dimension, porque en un tablero en forma de rombo ya la dimension como la definimos
      no nos serviria. O cualquier otro tipo de tablero que no sea ni cuadrado o rectangular*/
 
@@ -19,14 +18,14 @@ public abstract class Board{
     for (byte counter = 0; counter < numberOfBoxes; counter++) { //no creo que se necesiten mas de 127 casillas, digo que el max sera 100.
       boxes[counter] = new Box(counter);
     }
-    neighborhood = new boolean[numberOfBoxes][numberOfBoxes];
+    neighborhood = new boolean[numberOfBoxes][numberOfBoxes]; //inicializar la topologia de vencindad en false
     for (int counterRows = 0; counterRows < numberOfBoxes; counterRows++) {
       for (int counterColumns = 0; counterColumns < numberOfBoxes; counterColumns++) {
           neighborhood[counterRows][counterColumns] = false;
       }
     }
 
-    testDelete();
+    //testDelete();
   }
 
   public Box getBox(int positionBox){
