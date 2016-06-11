@@ -63,7 +63,7 @@ public abstract class Board{
   }
 
   public void testDelete(){ //Metodo solo de prueba, para verificar la liberacion de filas y columnas, tambien sumar puntaje.
-    Status fullBox = new FullBox();
+    Status fullBox = Status.FULL;
     byte counterJump = 0, positionBoxR = 10, positionBoxC = 7, positionBoxR2 = 20;
     while(counterJump < dimension){
       boxes[positionBoxR].setStatus(fullBox);
