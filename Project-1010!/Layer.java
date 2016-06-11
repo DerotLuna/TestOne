@@ -18,7 +18,7 @@ public class Layer{
    }
 
    public void verifyLayer(byte dimension){
-     byte counter = 0; String status = "FULL";
+     byte counter = 0; Status status = Status.FULL;
      while(counter < dimension){
        if(boxes[counter].getStatus() == status) permitRelease = true;
        else{
@@ -31,7 +31,7 @@ public class Layer{
 
    public byte boxesRelease(byte dimension){
      if(permitRelease){
-       Status status = new FreeBox();
+       Status status = Status.FREE;
        for (byte counter = 0; counter < dimension; counter ++) {
          boxes[counter].setStatus(status);
        }

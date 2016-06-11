@@ -1,5 +1,5 @@
-public interface Status{
-  public String getStatus();
+public enum Status{
+  FULL, FREE;
 }
 
 /*

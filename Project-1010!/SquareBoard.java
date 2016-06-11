@@ -1,8 +1,8 @@
 import java.awt.Color;
 
 public class SquareBoard extends Board{
-
-
+  private static final Status STATUS_FREE = Status.FREE; //se utiliza para verificar si las casillas estan libres.
+  private static final Status  STATUS_FULL = Status.FULL;
   public SquareBoard(byte dimension, byte id){
     super(dimension, id);
     //Aqui hago la creacion de mis capas, por cada fila y columna.
@@ -67,10 +67,10 @@ public class SquareBoard extends Board{
   }
 
   public boolean squareEvaluations(byte sizeSquare, int positionBox, boolean checked){
-    String status = "FREE";
+    //String status = Status.FREE;
 
     if (sizeSquare == 1){
-      if (boxes[positionBox].getStatus() != status) checked = false;
+      if (boxes[positionBox].getStatus() != STATUS_FREE) checked = false;
     }
     else{ //sera general para todos las dimensiones de los cuadrados
       int positionBoxDown = positionBox + dimension;
@@ -85,7 +85,7 @@ public class SquareBoard extends Board{
             break exit;
           }
           else{
-            if(boxes[positionBox].getStatus() == status && boxes[positionBox + 1].getStatus() == status && boxes[positionBoxDown].getStatus() == status){
+            if(boxes[positionBox].getStatus() == STATUS_FREE && boxes[positionBox + 1].getStatus() == STATUS_FREE && boxes[positionBoxDown].getStatus() == STATUS_FREE){
               positionBox ++;
               positionBoxDown ++;
             }
@@ -99,7 +99,7 @@ public class SquareBoard extends Board{
 
         if (counterExit == sizeSquare - 1){
           positionBoxDown ++;
-          if (boxes[positionBoxDown].getStatus() != status) checked = false;
+          if (boxes[positionBoxDown].getStatus() != STATUS_FREE) checked = false;
         }
         counterExit ++;
         positionBox = referenceBox;
@@ -111,14 +111,14 @@ public class SquareBoard extends Board{
   }
 
   public boolean lineEvaluations(byte sizeLine, int positionBox, int option, boolean checked){
-    String status = "FREE";
+    //String status = Status.FREE;
     byte counterExit = 0;
 
       if(option == 1){
         while(counterExit < sizeLine){
 
           if (counterExit == sizeLine - 1){
-            if(boxes[positionBox].getStatus() == status) positionBox ++;
+            if(boxes[positionBox].getStatus() == STATUS_FREE) positionBox ++;
             else{
               checked = false;
               break;
@@ -130,7 +130,7 @@ public class SquareBoard extends Board{
               break;
             }
             else{
-              if(boxes[positionBox].getStatus() == status) positionBox ++;
+              if(boxes[positionBox].getStatus() == STATUS_FREE) positionBox ++;
               else{
                 checked = false;
                 break;
@@ -144,7 +144,7 @@ public class SquareBoard extends Board{
         while(counterExit < sizeLine && positionBox <= numberOfBoxes){ //estar pendiente de la 2da condicion
 
           if (counterExit == sizeLine - 1){
-            if(boxes[positionBox].getStatus() == status) positionBox ++;
+            if(boxes[positionBox].getStatus() == STATUS_FREE) positionBox ++;
             else{
               checked = false;
               break;
@@ -156,7 +156,7 @@ public class SquareBoard extends Board{
               break;
             }
             else{
-              if(boxes[positionBox].getStatus() == status) positionBox += dimension;
+              if(boxes[positionBox].getStatus() == STATUS_FREE) positionBox += dimension;
               else{
                 checked = false;
                 break;
@@ -173,7 +173,7 @@ public class SquareBoard extends Board{
 
     int pivot = positionBox;
     byte exitCounter = 0;
-    String status = "FREE";
+    //String status = Status.FREE;
 
     while(exitCounter < lSize){
       if ((positionBox > numberOfBoxes) || (positionBox >= numberOfBoxes - dimension) || !(neighborhood[pivot][pivot + 1])){ //falta un condicional
@@ -182,14 +182,14 @@ public class SquareBoard extends Board{
       }
       else {
         if (pivot == positionBox){
-          if ((boxes[pivot].getStatus() == status) && (boxes[pivot + 1].getStatus() == status)) pivot += dimension;
+          if ((boxes[pivot].getStatus() == STATUS_FREE) && (boxes[pivot + 1].getStatus() == STATUS_FREE)) pivot += dimension;
           else{
             checked = false;
             break;
           }
         }
         else {
-          if (((boxes[pivot].getStatus()) == status)) pivot++;
+          if (((boxes[pivot].getStatus()) == STATUS_FREE)) pivot++;
           else{
             checked = false;
             break;
@@ -204,7 +204,7 @@ public class SquareBoard extends Board{
   public boolean leftLEvaluation(byte sizeOfPiece ,int positionBox ,boolean checked){
       byte exitCounter = 0;
       int counterJump = positionBox - dimension;
-      String status = "FREE";
+      //String status = Status.FREE;
 
       while(exitCounter < sizeOfPiece){
 
@@ -213,7 +213,7 @@ public class SquareBoard extends Board{
           break;
         }
         else {
-          if ((boxes[positionBox].getStatus() == status) && (boxes[counterJump + 1].getStatus() == status))positionBox++;
+          if ((boxes[positionBox].getStatus() == STATUS_FREE) && (boxes[counterJump + 1].getStatus() == STATUS_FREE))positionBox++;
           else{
             checked = false;
             break;
@@ -221,7 +221,7 @@ public class SquareBoard extends Board{
 
           if (exitCounter == (sizeOfPiece - 1)){
             positionBox -= dimension;
-            if ((boxes[positionBox].getStatus() == status) && (boxes[positionBox + 1].getStatus() == status)) positionBox++;
+            if ((boxes[positionBox].getStatus() == STATUS_FREE) && (boxes[positionBox + 1].getStatus() == STATUS_FREE)) positionBox++;
             else{
               checked = false;
               break;
@@ -237,7 +237,7 @@ public class SquareBoard extends Board{
 
     byte exitCounter = 0;
     int upCounter = positionBox - dimension;
-    String status = "FREE";
+    //String status = Status.FREE;
 
     while(exitCounter < sizeOfPiece){
       if (upCounter < 0){
@@ -256,7 +256,7 @@ public class SquareBoard extends Board{
             break;
           }
           else{
-            if ((boxes[positionBox].getStatus() == status) && (boxes[upCounter].getStatus() == status)) positionBox -= dimension;
+            if ((boxes[positionBox].getStatus() == STATUS_FREE) && (boxes[upCounter].getStatus() == STATUS_FREE)) positionBox -= dimension;
             else {
               checked = false;
               break;
@@ -269,7 +269,7 @@ public class SquareBoard extends Board{
             break;
           }
           else{
-            if (boxes[positionBox + 1].getStatus() == status){
+            if (boxes[positionBox + 1].getStatus() == STATUS_FREE){
               positionBox ++;
               upCounter++;
             }
@@ -289,7 +289,7 @@ public class SquareBoard extends Board{
   public boolean leftInvestedLEvaluation(byte sizeOfPiece ,int positionBox ,boolean checked){
     byte exitCounter = 0;
     byte counterJump = 1;
-    String status = "FREE";
+    //String status = Status.FREE;
 
     while (exitCounter < sizeOfPiece){
 
@@ -304,7 +304,7 @@ public class SquareBoard extends Board{
               break;
             }
             else {
-              if (boxes[positionBox].getStatus() == status) positionBox += dimension;
+              if (boxes[positionBox].getStatus() == STATUS_FREE) positionBox += dimension;
               else {
                 checked = false;
                 break;
@@ -317,7 +317,7 @@ public class SquareBoard extends Board{
             break;
           }
           else {
-            if (boxes[positionBox].getStatus() == status) positionBox ++;
+            if (boxes[positionBox].getStatus() == STATUS_FREE) positionBox ++;
             else {
               checked = false;
               break;
@@ -325,7 +325,7 @@ public class SquareBoard extends Board{
           }
         }
         else {
-          if (boxes[positionBox].getStatus() == status) positionBox ++;
+          if (boxes[positionBox].getStatus() == STATUS_FREE) positionBox ++;
           else{
             checked = false;
             break;
@@ -339,9 +339,9 @@ public class SquareBoard extends Board{
   }
 
   public void addSquare(byte sizeSquare, int positionBox){
-    Status fullBox = new FullBox();
+    //Status fullBox = new FullBox();
     if(sizeSquare == 1){
-      boxes[positionBox].setStatus(fullBox);
+      boxes[positionBox].setStatus(STATUS_FULL);
     }
     else{
       int positionBoxDown = positionBox + dimension;
@@ -349,7 +349,7 @@ public class SquareBoard extends Board{
       while(counterExit <= sizeSquare){
         byte counterJump = 1;
         while(counterJump <= sizeSquare){
-          boxes[positionBox].setStatus(fullBox);
+          boxes[positionBox].setStatus(STATUS_FULL);
           counterJump ++;
           positionBox++;
         }
@@ -362,10 +362,10 @@ public class SquareBoard extends Board{
   }
 
   public void addLine(byte sizeLine, int positionBox, int answer){
-    Status fullBox = new FullBox();
+    //Status fullBox = new FullBox();
     byte counterExit = 1;
     while(counterExit <= sizeLine){
-      boxes[positionBox].setStatus(fullBox);
+      boxes[positionBox].setStatus(STATUS_FULL);
       counterExit ++;
       System.out.println("positionBox: " + positionBox);
       if(answer == 1)  positionBox++;
@@ -374,11 +374,11 @@ public class SquareBoard extends Board{
   }
 
   public void addL(byte sizeL, int positionBox){
-      Status fullBox = new FullBox();
+      //Status fullBox = new FullBox();
       byte exitCounter = 0;
 
       while (exitCounter < sizeL){
-        boxes[positionBox].setStatus(fullBox);
+        boxes[positionBox].setStatus(STATUS_FULL);
           if (exitCounter == 0) positionBox += dimension;
           else positionBox ++;
         exitCounter ++;
@@ -387,12 +387,12 @@ public class SquareBoard extends Board{
 
 
     public void addLeftL(byte sizeLeftL, int positionBox){
-      Status fullBox = new FullBox();
+      //Status fullBox = new FullBox();
       byte exitCounter = 0;
       byte counterJump = 1;
 
       while (exitCounter < sizeLeftL){
-        boxes[positionBox].setStatus(fullBox);
+        boxes[positionBox].setStatus(STATUS_FULL);
           if (counterJump == sizeLeftL - 1) positionBox -= dimension;
           else positionBox ++;
         exitCounter ++;
@@ -401,11 +401,11 @@ public class SquareBoard extends Board{
     }
 
     public void addInvestedL(byte sizeInvestedL, int positionBox){
-      Status fullBox = new FullBox();
+      //Status fullBox = new FullBox();
       byte exitCounter = 0;
 
       while (exitCounter < sizeInvestedL){
-        boxes[positionBox].setStatus(fullBox);
+        boxes[positionBox].setStatus(STATUS_FULL);
           if (exitCounter == 0) positionBox -= dimension;
           else positionBox ++;
         exitCounter ++;
@@ -413,11 +413,11 @@ public class SquareBoard extends Board{
     }
 
     public void addLeftInvestedL(byte sizeInvestedLeftL, int positionBox){
-      Status fullBox = new FullBox();
+      //Status fullBox = new FullBox();
       byte exitCounter = 0;
       byte counterJump = 1;
       while (exitCounter < sizeInvestedLeftL){
-        boxes[positionBox].setStatus(fullBox);
+        boxes[positionBox].setStatus(STATUS_FULL);
           if (counterJump == sizeInvestedLeftL - 1)positionBox += dimension;
           else positionBox ++;
         counterJump ++;
