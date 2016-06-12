@@ -6,8 +6,6 @@ public abstract class Board{
   protected int numberOfBoxes;
   protected boolean[][] neighborhood;
   protected Layer[] layers;
-  /* Buscar la manera de no tener la dimension, porque en un tablero en forma de rombo ya la dimension como la definimos
-     no nos serviria. O cualquier otro tipo de tablero que no sea ni cuadrado o rectangular*/
 
   public Board(byte dimension, byte id){
     this.dimension = dimension;

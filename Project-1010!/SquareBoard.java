@@ -13,8 +13,6 @@ public class SquareBoard extends Board{
       layers[counterLayers + dimension] = new Layer("Column " + counterLayers, dimension);
       positionBoxLayer = 0;
       while(positionBoxLayer < dimension){
-        //boxes[counterRows].setLayer(layers[counterLayers]);  // le doy a conocer a casilla a la capa que pertenece
-        //boxes[counterColumns].setLayer(layers[counterLayers + dimension]);  // le doy a conocer a casilla a la capa que pertenece
         //verificar si es realmente necesario, que las casillas sepan a que capa pertenecen...
         layers[counterLayers].setBoxToLayer(boxes[counterRows], positionBoxLayer);
         layers[counterLayers + dimension].setBoxToLayer(boxes[counterColumns], positionBoxLayer);
@@ -30,6 +28,7 @@ public class SquareBoard extends Board{
   }
 
   public void shapeBoard(){
+    //Se llena la matriz de adyacencia donde se dice quienes son vecinos.
     byte rowAndColumn = 0, counterDown = dimension, counter = (byte)(counterDown - 1);
     while (rowAndColumn < (numberOfBoxes - 1)){
       if(rowAndColumn <= counter){
@@ -49,6 +48,7 @@ public class SquareBoard extends Board{
   }
 
   public boolean checkPositions(Piece piece, int positionBox){
+    //Verificamos que tipo de pieza es para asi poder revisar en mi tablero si puede ocupar ese espacio donde se desea colocar.
     boolean checked = true;
     //creo que el pivote que definiremos seria un pivote logico, no podemos tener una variable, o no la veo por lo menos.
     String typePiece = piece.getTypePiece();
@@ -67,8 +67,7 @@ public class SquareBoard extends Board{
   }
 
   public boolean squareEvaluations(byte sizeSquare, int positionBox, boolean checked){
-    //String status = Status.FREE;
-
+    //Aqui verificamos cualquier pieza que sea cuadrada, no importa a dimension.
     if (sizeSquare == 1){
       if (boxes[positionBox].getStatus() != STATUS_FREE) checked = false;
     }
@@ -111,7 +110,7 @@ public class SquareBoard extends Board{
   }
 
   public boolean lineEvaluations(byte sizeLine, int positionBox, int option, boolean checked){
-    //String status = Status.FREE;
+    //Aqui se verifican las piezas en linea, horizontal o vertical de cualquier size.
     byte counterExit = 0;
 
       if(option == 1){
@@ -170,10 +169,9 @@ public class SquareBoard extends Board{
   }
 
   public boolean lEvaluation(byte lSize ,int positionBox ,boolean checked){
-
+    //Aqui se evaluan las piezas en forma de L normal, de cualquier size en su parte mas larga.
     int pivot = positionBox;
     byte exitCounter = 0;
-    //String status = Status.FREE;
 
     while(exitCounter < lSize){
       if ((positionBox > numberOfBoxes) || (positionBox >= numberOfBoxes - dimension) || !(neighborhood[pivot][pivot + 1])){ //falta un condicional
@@ -202,18 +200,17 @@ public class SquareBoard extends Board{
   }
 
   public boolean leftLEvaluation(byte sizeOfPiece ,int positionBox ,boolean checked){
+    //Aqui se evaluan las piezas en forma de L pero hacia la izquierda, de cualquier size en su parte mas larga.
       byte exitCounter = 0;
       int counterJump = positionBox - dimension;
-      //String status = Status.FREE;
 
       while(exitCounter < sizeOfPiece){
-
         if ((positionBox <= dimension) || (positionBox > numberOfBoxes) || !(neighborhood[counterJump][counterJump + 1])){ //or (neighborhood[][])
           checked = false;
           break;
         }
         else {
-          if ((boxes[positionBox].getStatus() == STATUS_FREE) && (boxes[counterJump + 1].getStatus() == STATUS_FREE))positionBox++;
+          if ((boxes[positionBox].getStatus() == STATUS_FREE) && (boxes[counterJump + 1].getStatus() == STATUS_FREE)) positionBox++;
           else{
             checked = false;
             break;
@@ -234,17 +231,15 @@ public class SquareBoard extends Board{
   }
 
   public boolean investedLEvaluation(byte sizeOfPiece ,int positionBox ,boolean checked){
-
+    //Aqui se evaluan las L invertidas, de cualquier size en su parte mas larga.
     byte exitCounter = 0;
     int upCounter = positionBox - dimension;
-    //String status = Status.FREE;
 
     while(exitCounter < sizeOfPiece){
       if (upCounter < 0){
         checked = false;
         break;
       }
-
       if ((positionBox > numberOfBoxes)){
         checked = false;
         break;
@@ -283,16 +278,14 @@ public class SquareBoard extends Board{
       exitCounter ++;
     }
     return checked;
-
   }
 
   public boolean leftInvestedLEvaluation(byte sizeOfPiece ,int positionBox ,boolean checked){
+    //Aqui se evaluan las piezas en forma de L invertidas y a las izquierda, de cualquier size en su parte mas larga.
     byte exitCounter = 0;
     byte counterJump = 1;
-    //String status = Status.FREE;
 
     while (exitCounter < sizeOfPiece){
-
       if ((positionBox > numberOfBoxes) || (positionBox >= numberOfBoxes - dimension)){
         checked = false;
         break;
@@ -339,7 +332,6 @@ public class SquareBoard extends Board{
   }
 
   public void addSquare(byte sizeSquare, int positionBox){
-    //Status fullBox = new FullBox();
     if(sizeSquare == 1){
       boxes[positionBox].setStatus(STATUS_FULL);
     }
@@ -362,7 +354,6 @@ public class SquareBoard extends Board{
   }
 
   public void addLine(byte sizeLine, int positionBox, int answer){
-    //Status fullBox = new FullBox();
     byte counterExit = 1;
     while(counterExit <= sizeLine){
       boxes[positionBox].setStatus(STATUS_FULL);
@@ -374,7 +365,6 @@ public class SquareBoard extends Board{
   }
 
   public void addL(byte sizeL, int positionBox){
-      //Status fullBox = new FullBox();
       byte exitCounter = 0;
 
       while (exitCounter < sizeL){
@@ -387,7 +377,6 @@ public class SquareBoard extends Board{
 
 
     public void addLeftL(byte sizeLeftL, int positionBox){
-      //Status fullBox = new FullBox();
       byte exitCounter = 0;
       byte counterJump = 1;
 
@@ -401,7 +390,6 @@ public class SquareBoard extends Board{
     }
 
     public void addInvestedL(byte sizeInvestedL, int positionBox){
-      //Status fullBox = new FullBox();
       byte exitCounter = 0;
 
       while (exitCounter < sizeInvestedL){
@@ -413,9 +401,9 @@ public class SquareBoard extends Board{
     }
 
     public void addLeftInvestedL(byte sizeInvestedLeftL, int positionBox){
-      //Status fullBox = new FullBox();
       byte exitCounter = 0;
       byte counterJump = 1;
+
       while (exitCounter < sizeInvestedLeftL){
         boxes[positionBox].setStatus(STATUS_FULL);
           if (counterJump == sizeInvestedLeftL - 1)positionBox += dimension;
@@ -426,6 +414,7 @@ public class SquareBoard extends Board{
     }
 
     public void addPiece(String typePiece, byte sizePiece,int positionBox){
+      //Despues de que se evalue si la pieza cabe, se llena las posiciones requeridas.
       if (typePiece == "SQUARE") addSquare(sizePiece, positionBox);
       else if (typePiece == "VERTICAL LINE") addLine(sizePiece, positionBox, 2);
       else if (typePiece == "HORIZONTAL LINE") addLine(sizePiece, positionBox, 1);
